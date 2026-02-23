@@ -18,6 +18,7 @@
   <ItemGroup>
     <Folder Include="Data\" />
     <Folder Include="Models\" />
+    <Folder Include="Новая папка\" />
   </ItemGroup>
 
 </Project>

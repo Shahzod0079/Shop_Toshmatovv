@@ -1,18 +1,21 @@
-﻿using Shop.Data.Mocks;
+﻿using Microsoft.AspNetCore.Mvc;
 using Shop_Toshmatovv.Data.Interfaces;
 
 namespace Shop_Toshmatovv.Controllers
 {
-    public class ItemsController
+    public class ItemsController : Controller
     {
-        public void ConfigureServices(IServiceCollection services)
-        {
-            // объединяем интерфейс и реализующий класс
-            services.AddTransient<ICategorys, MockCategorys>();
-            services.AddTransient<IItems, MockItems>();
+        private readonly IItems _items;
 
-            // включаем поддержку MVC
-            services.AddMvc(option => option.EnableEndpointRouting = false);
+        public ItemsController(IItems items)
+        {
+            _items = items;
+        }
+
+        public IActionResult List()
+        {
+            var items = _items.AllItems;
+            return View(items);
         }
     }
 }

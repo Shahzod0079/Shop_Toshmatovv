@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Shop.Data.Mocks;
+using Shop_Toshmatovv.Data.Mocks;
 using Shop_Toshmatovv.Data.Interfaces;
 using Shop_Toshmatovv.Data.Mocks;
 using Shop_Toshmatovv.Data.Models;
@@ -22,7 +22,7 @@ namespace Shop_Toshmatovv
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddTransient<ICategorys, MockCategorys>();
-            services.AddTransient<IItems, Shop.Data.Mocks.MockItems>();
+            services.AddTransient<IItems, Shop_Toshmatovv.Data.Mocks.MockItems>();
             services.AddMvc(option => option.EnableEndpointRouting = false);
         }
 

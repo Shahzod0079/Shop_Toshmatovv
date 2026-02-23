@@ -4,6 +4,6 @@ namespace Shop_Toshmatovv.Data.Interfaces
 {
     public interface ICategorys
     {
-        public IEnumerable<Categories> AllCategories { get; }
+        IEnumerable<Categories> AllCategories { get; }
     }
 }

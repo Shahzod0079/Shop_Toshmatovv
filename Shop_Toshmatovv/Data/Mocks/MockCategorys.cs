@@ -1,7 +1,7 @@
 ﻿using Shop_Toshmatovv.Data.Interfaces;
 using Shop_Toshmatovv.Data.Models;
 
-namespace Shop.Data.Mocks
+namespace Shop_Toshmatovv.Data.Mocks
 {
     public class MockCategorys : ICategorys
     {
@@ -13,13 +13,13 @@ namespace Shop.Data.Mocks
                 {
                     new Categories()
                     {
-                        Id = 0,
+                        Id = 1,  // Изменил с 0 на 1
                         Name = "Микроволновые печи",
                         Description = "Микроволновая печь – электроприбор, позволяющий выполнять различные виды работ",
                     },
                     new Categories()
                     {
-                        Id = 1,
+                        Id = 2,  // Изменил с 1 на 2
                         Name = "Мультиварки",
                         Description = "Мультиварка – многофункциональный бытовой прибор для приготовления пищи",
                     }
@@ -28,4 +28,3 @@ namespace Shop.Data.Mocks
         }
     }
 }
-    

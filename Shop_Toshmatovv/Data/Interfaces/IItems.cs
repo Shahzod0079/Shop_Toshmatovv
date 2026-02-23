@@ -4,6 +4,6 @@ namespace Shop_Toshmatovv.Data.Interfaces
 {
     public interface IItems
     {
-        public IEnumerable<Items> ALlItems {  get; }
+        IEnumerable<Items> AllItems { get; }
     }
 }

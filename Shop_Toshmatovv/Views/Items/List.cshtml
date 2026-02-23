@@ -1,0 +1,24 @@
+﻿<!--Подключаем наше пространство имён -->
+@using Shop_Toshmatovv.Data.Models
+
+<!--В качестве модели данных используем предметы -->
+@model IEnumerable<Items>
+
+@{
+    // в качестве основного элемента используем файл _Layout
+    Layout = "_Layout";
+}
+
+<h2>Все предметы</h2>
+
+@{
+    // Перебираем предметы
+    foreach (var item in Model)
+    {
+        <div>
+            <h3>Модель: @item.Name</h3>
+            <p>Цена: @item.Price.ToString("c")</p>
+            <p>Категория: @item.Categorys.Name</p>
+        </div>
+    }
+}

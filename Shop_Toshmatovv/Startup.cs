@@ -1,4 +1,9 @@
-﻿using Shop.Data.Mocks;
+﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Shop.Data.Mocks;
 using Shop_Toshmatovv.Data.Interfaces;
 using Shop_Toshmatovv.Data.Mocks;
 using Shop_Toshmatovv.Data.Models;
@@ -7,13 +12,17 @@ namespace Shop_Toshmatovv
 {
     public class Startup
     {
+        public IConfiguration Configuration { get; }
+
+        public Startup(IConfiguration configuration)
+        {
+            Configuration = configuration;
+        }
+
         public void ConfigureServices(IServiceCollection services)
         {
-            // объединяем интерфейс и реализующий класс
             services.AddTransient<ICategorys, MockCategorys>();
             services.AddTransient<IItems, Shop.Data.Mocks.MockItems>();
-
-            // включаем поддержку MVC
             services.AddMvc(option => option.EnableEndpointRouting = false);
         }
 
@@ -23,10 +32,21 @@ namespace Shop_Toshmatovv
             {
                 app.UseDeveloperExceptionPage();
             }
+            else
+            {
+                app.UseExceptionHandler("/Home/Error");
+            }
 
-            app.UseStatusCodePages();
             app.UseStaticFiles();
-            app.UseMvcWithDefaultRoute();
+
+            app.UseRouting();
+
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllerRoute(
+                    name: "default",
+                    pattern: "{controller=Home}/{action=Index}/{id?}");
+            });
         }
     }
 }

@@ -1,14 +1,18 @@
-﻿<!DOCTYPE html>
-
-<html>
+﻿<html>
 <head>
     <meta name="viewport" content="width=device-width" />
-    <link rel="stylesheet" href="~/css/Style.css" />
+    <!--Подключение стилей-->
+    <link rel="stylesheet" href="./css/Style.css" />
     <title>@ViewBag.Title</title>
 </head>
 <body>
-    <div>
-        @RenderBody()
+    <!--Верхняя шапка сайта-->
+    <div class="header">
+        <img src="images\location_14790627.png" />
+        <input class="search" placeholder="Поиск по сайту" />
+        <img class="basket" src="images\shopping_16454496.png" />
     </div>
+
+    @RenderBody()
 </body>
 </html>

@@ -10,10 +10,16 @@
 
 @foreach (var item in Model)
 {
-    <div style="border:1px solid #ccc; margin:10px; padding:10px;">
-        <h3>Модель: @item.Name</h3>
-        <p>Цена: @item.Price.ToString("c")</p>
-        <p>Категория: @item.Categorys.Name</p>
-        <p>@item.Description</p>
+    <div style="border:1px solid #ccc; margin:10px; padding:10px; display:flex; gap:20px;">
+        @if (!string.IsNullOrEmpty(item.Img))
+        {
+            <img src="@item.Img" alt="@item.Name" style="max-width:200px; max-height:200px;" />
+        }
+        <div>
+            <h3>Модель: @item.Name</h3>
+            <p><strong>Цена:</strong> @item.Price.ToString("C")</p>
+            <p><strong>Категория:</strong> @item.Categorys?.Name</p>
+            <p><strong>Описание:</strong> @item.Description</p>
+        </div>
     </div>
 }

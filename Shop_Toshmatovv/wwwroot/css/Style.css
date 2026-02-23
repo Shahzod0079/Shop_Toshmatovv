@@ -1,43 +1,51 @@
 ﻿body {
-    padding-top: 50px;
-    padding-bottom: 20px;
+    padding: 0px;
+    margin: 0px;
 }
 
-/* Set padding to keep content from hitting the edges */
-.body-content {
-    padding-left: 15px;
-    padding-right: 15px;
+.header {
+    height: 60px;
+    background: #007eff;
+    box-shadow: 0px 5px 5px #00000038;
 }
 
-/* Set width on the form input elements since they're 100% wide by default */
-input,
-select,
-textarea {
-    max-width: 280px;
+    .header img {
+        width: 40px;
+        margin: 10px;
+        float: left;
+    }
+
+    .header .search {
+        margin-top: 10px;
+        height: 40px;
+        width: 50%;
+        border: none;
+        padding: 0px 10px;
+    }
+
+    .header .basket {
+        width: 20px;
+        margin: 20px;
+        float: right;
+    }
+
+.item {
+    box-shadow: 2px 2px 2px #00000038;
+    margin-bottom: 10px;
 }
 
-/* styles for validation helpers */
-.field-validation-error {
-    color: #b94a48;
-}
+    .item img {
+        padding: 10px;
+        width: 100px;
+        float: left;
+    }
 
-.field-validation-valid {
-    display: none;
-}
+    .item .data {
+        margin-left: 120px;
+        padding-top: 5px;
+        padding-bottom: 5px;
+    }
 
-input.input-validation-error {
-    border: 1px solid #b94a48;
+h3 {
+    margin: 0px;
 }
-
-input[type="checkbox"].input-validation-error {
-    border: 0 none;
-}
-
-.validation-summary-errors {
-    color: #b94a48;
-}
-
-.validation-summary-valid {
-    display: none;
-}
-

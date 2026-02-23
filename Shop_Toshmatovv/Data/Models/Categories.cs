@@ -1,4 +1,7 @@
-﻿namespace Shop_Toshmatovv.Data.Models
+﻿using System.Collections.Generic;
+
+
+namespace Shop_Toshmatovv.Data.Models
 {
     public class Categories
     {

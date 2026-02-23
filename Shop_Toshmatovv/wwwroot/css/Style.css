@@ -7,31 +7,59 @@
     height: 60px;
     background: #007eff;
     box-shadow: 0px 5px 5px #00000038;
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+    gap: 20px;
 }
 
     .header img {
         width: 40px;
-        margin: 10px;
-        float: left;
+        height: 40px;
+        margin: 0;
     }
 
     .header .search {
-        margin-top: 10px;
         height: 40px;
-        width: 50%;
+        flex: 1;
+        max-width: 500px;
         border: none;
-        padding: 0px 10px;
+        padding: 0px 15px;
+        border-radius: 5px;
     }
 
-    .header .basket {
-        width: 20px;
-        margin: 20px;
-        float: right;
+/* Навигация справа от поиска */
+.nav-links {
+    display: flex;
+    gap: 15px;
+    margin-left: auto; /* Это прижимает навигацию вправо */
+    margin-right: 10px;
+}
+
+.nav-link {
+    color: white;
+    text-decoration: none;
+    padding: 8px 15px;
+    border-radius: 5px;
+    font-weight: bold;
+    transition: background-color 0.3s;
+    white-space: nowrap; /* Запрещаем перенос текста */
+}
+
+    .nav-link:hover {
+        background-color: #0052a3;
     }
 
+.header .basket {
+    width: 25px;
+    height: 25px;
+}
+
+/* Стили для товаров */
 .item {
     box-shadow: 2px 2px 2px #00000038;
     margin-bottom: 10px;
+    overflow: hidden;
 }
 
     .item img {
@@ -42,10 +70,88 @@
 
     .item .data {
         margin-left: 120px;
-        padding-top: 5px;
-        padding-bottom: 5px;
+        padding: 15px;
     }
 
 h3 {
     margin: 0px;
 }
+
+/* Стили для категорий */
+.categories-page {
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.page-title {
+    color: #333;
+    margin-bottom: 30px;
+    font-size: 24px;
+    border-bottom: 2px solid #007eff;
+    padding-bottom: 10px;
+}
+
+.categories-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.category-card {
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 2px 2px 5px #00000038;
+    transition: transform 0.3s;
+}
+
+    .category-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 5px 15px #00000038;
+    }
+
+.category-name {
+    color: #007eff;
+    margin: 0 0 10px 0;
+    font-size: 20px;
+}
+
+.category-description {
+    color: #666;
+    line-height: 1.5;
+    margin-bottom: 15px;
+    min-height: 50px;
+}
+
+.category-stats {
+    color: #555;
+    margin-bottom: 15px;
+    padding: 10px 0;
+    border-top: 1px solid #eee;
+    border-bottom: 1px solid #eee;
+}
+
+    .category-stats strong {
+        color: #007eff;
+        font-size: 18px;
+    }
+
+.category-link {
+    display: inline-block;
+    background-color: #007eff;
+    color: white;
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+    transition: background-color 0.3s;
+    width: 100%;
+    text-align: center;
+    box-sizing: border-box;
+}
+
+    .category-link:hover {
+        background-color: #0052a3;
+    }

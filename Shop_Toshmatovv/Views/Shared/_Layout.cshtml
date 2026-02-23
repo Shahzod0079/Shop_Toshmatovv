@@ -1,16 +1,21 @@
 ﻿<html>
 <head>
     <meta name="viewport" content="width=device-width" />
-    <!--Подключение стилей-->
-    <link rel="stylesheet" href="./css/Style.css" />
+    <link rel="stylesheet" href="/css/Style.css" />
     <title>@ViewBag.Title</title>
 </head>
 <body>
-    <!--Верхняя шапка сайта-->
     <div class="header">
-        <img src="images\location_14790627.png" />
+        <img src="/images/location_14790627.png" />
+
         <input class="search" placeholder="Поиск по сайту" />
-        <img class="basket" src="images\shopping_16454496.png" />
+
+        <div class="nav-links">
+            <a href="@Url.Action("List", "Items")" class="nav-link">Все товары</a>
+            <a href="@Url.Action("Index", "Categories")" class="nav-link">Категории</a>
+        </div>
+
+        <img class="basket" src="/images/shopping_16454496.png" />
     </div>
 
     @RenderBody()

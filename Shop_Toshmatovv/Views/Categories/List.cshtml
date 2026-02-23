@@ -1,0 +1,53 @@
+﻿@using Shop_Toshmatovv.Data.Models
+@model IEnumerable<Items>
+
+@{
+    ViewBag.Title = ViewBag.CategoryName;
+    Layout = "_Layout";
+}
+
+<h2>@ViewBag.CategoryName</h2>
+<style>
+    .back-link {
+        display: inline-block;
+        margin-bottom: 20px;
+        color: #007eff;
+        text-decoration: none;
+        font-weight: bold;
+        padding: 5px 10px;
+        border-radius: 5px;
+        transition: all 0.3s;
+    }
+
+        .back-link:hover {
+            background-color: #007eff;
+            color: white;
+            padding-left: 15px;
+        }
+</style>
+<p>
+    <a href="@Url.Action("Index", "Categories")" class="back-link">← Назад к категориям</a>
+</p>
+
+@if (!Model.Any())
+{
+    <p>В этой категории пока нет товаров.</p>
+}
+else
+{
+    @foreach (var item in Model)
+    {
+        <div style="border:1px solid #ccc; margin:10px; padding:10px; display:flex; gap:20px;">
+            @if (!string.IsNullOrEmpty(item.Img))
+            {
+                <img src="@item.Img" alt="@item.Name" style="max-width:200px; max-height:200px;"
+                     onerror="this.onerror=null; this.src='/images/placeholder.png';" />
+            }
+            <div>
+                <h3>@item.Name</h3>
+                <p><strong>Цена:</strong> @item.Price.ToString("C")</p>
+                <p><strong>Описание:</strong> @item.Description</p>
+            </div>
+        </div>
+    }
+}

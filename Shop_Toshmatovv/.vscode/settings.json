@@ -1,0 +1,7 @@
+﻿{
+    "less.compile": {
+        "out": "wwwroot/css/",
+        "sourceMap": false,
+        "compress": false
+    }
+}

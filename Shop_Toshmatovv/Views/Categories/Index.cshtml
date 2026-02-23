@@ -1,0 +1,27 @@
+﻿@using Shop_Toshmatovv.Data.Models
+@model IEnumerable<Categories>
+
+@{
+    ViewBag.Title = "Категории товаров";
+    Layout = "_Layout";
+}
+
+<div class="categories-page">
+    <h2 class="page-title">Категории товаров</h2>
+
+    <div class="categories-grid">
+        @foreach (var category in Model)
+        {
+            <div class="category-card">
+                <h3 class="category-name">@category.Name</h3>
+                <p class="category-description">@category.Description</p>
+                <div class="category-stats">
+                    Товаров в категории: <strong>@(category.Items?.Count() ?? 0)</strong>
+                </div>
+                <a href="@Url.Action("List", "Categories", new { id = category.Id })" class="category-link">
+                    Перейти к товарам →
+                </a>
+            </div>
+        }
+    </div>
+</div>

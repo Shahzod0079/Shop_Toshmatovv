@@ -1,21 +1,38 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Shop_Toshmatovv.Data.Interfaces;
+using Shop_Toshmatovv.Data.ViewModell;
+using Shop_Toshmatovv.Data.Models;
 
 namespace Shop_Toshmatovv.Controllers
 {
     public class ItemsController : Controller
     {
-        private readonly IItems _items;
+        private IItems IAllItems;
 
-        public ItemsController(IItems items)
+        private ICategorys IAllCategories;
+
+        VMItems VMItems = new VMItems();
+
+        public ItemsController(IItems IAllItems, ICategorys IAllCategories)
         {
-            _items = items;
+            this.IAllItems = IAllItems;
+
+            this.IAllCategories = IAllCategories;
         }
 
-        public IActionResult List()
+        public ViewResult List(int id = 0)
         {
-            var items = _items.AllItems;
-            return View(items);
+            ViewBag.Title = "Страница с предметами";
+
+
+
+            VMItems.Items = IAllItems.AllItems;
+
+            VMItems.Categorys = IAllCategories.AllCategories;
+
+            VMItems.SelectCategory = id;
+
+            return View(VMItems);
         }
     }
 }

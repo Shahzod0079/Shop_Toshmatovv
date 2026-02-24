@@ -3,7 +3,7 @@
 
 namespace Shop_Toshmatovv.Data.Models
 {
-    public class Categories
+    public class Categorys
     {
         public int Id { get; set; }
 

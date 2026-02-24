@@ -1,25 +1,51 @@
-﻿@using Shop_Toshmatovv.Data.Models
-@model IEnumerable<Items>
+﻿@using Shop_Toshmatovv.Data.ViewModell
+@model VMItems
 
 @{
     ViewBag.Title = "Список товаров";
     Layout = "_Layout";
 }
 
+<div>
+    <select onChange="SelectCategory(this)">
+        <option value="0">Выбрать ...</option>
+        @foreach (var Category in Model.Categorys)
+        {
+            if (Category.Id == Model.SelectCategory)
+            {
+                <option selected="selected" value="@Category.Id">@Category.Name</option>
+            }
+            else
+            {
+                <option value="@Category.Id">@Category.Name</option>
+            }
+        }
+    </select>
+
+    <script>
+        function SelectCategory(sender) {
+            window.location = "/Items/List?id=" + sender.value;
+        }
+    </script>
+</div>
+
 <h2>Все предметы</h2>
 
-@foreach (var item in Model)
+@foreach (var item in Model.Items)  
 {
-    <div style="border:1px solid #ccc; margin:10px; padding:10px; display:flex; gap:20px;">
-        @if (!string.IsNullOrEmpty(item.Img))
-        {
-            <img src="@item.Img" alt="@item.Name" style="max-width:200px; max-height:200px;" />
-        }
-        <div>
-            <h3>Модель: @item.Name</h3>
-            <p><strong>Цена:</strong> @item.Price.ToString("C")</p>
-            <p><strong>Категория:</strong> @item.Categorys?.Name</p>
-            <p><strong>Описание:</strong> @item.Description</p>
+    if (Model.SelectCategory == 0 || item.Categorys.Id == Model.SelectCategory)
+    {
+        <div style="border:1px solid #ccc; margin:10px; padding:10px; display:flex; gap:20px;">
+            @if (!string.IsNullOrEmpty(item.Img))
+            {
+                <img src="@item.Img" alt="@item.Name" style="max-width:200px; max-height:200px;" />
+            }
+            <div>
+                <h3>Модель: @item.Name</h3>
+                <p><strong>Цена:</strong> @item.Price.ToString("C")</p>
+                <p><strong>Категория:</strong> @item.Categorys?.Name</p>
+                <p><strong>Описание:</strong> @item.Description</p>
+            </div>
         </div>
-    </div>
+    }
 }

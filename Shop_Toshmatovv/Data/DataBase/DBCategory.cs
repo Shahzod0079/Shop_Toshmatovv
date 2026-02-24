@@ -8,11 +8,11 @@ namespace Shop_Toshmatovv.Data.DataBase
 {
     public class DBCategory : ICategorys
     {
-        public IEnumerable<Categories> AllCategories
+        public IEnumerable<Categorys> AllCategories
         {
             get
             {
-                List<Categories> categories = new List<Categories>();
+                List<Categorys> categories = new List<Categorys>();
 
                 MySqlConnection MySqlConnection = Connection.MySqlOpen();
 
@@ -21,7 +21,7 @@ namespace Shop_Toshmatovv.Data.DataBase
                 while (CategorysData.Read())
                 {
 
-                    categories.Add(new Categories()
+                    categories.Add(new Categorys()
                     {
                         Id = CategorysData.IsDBNull(0) ? -1 : CategorysData.GetInt32(0),
                         Name = CategorysData.IsDBNull(1) ? null : CategorysData.GetString(1),

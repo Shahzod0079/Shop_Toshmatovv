@@ -24,7 +24,7 @@ namespace Shop_Toshmatovv.Data.Mocks
                         Id = 1,
                         Name = "DEXP MS-70",
                         Description = "Благодаря черному корпусу с лаконичным дизайном микроволновка DEXP MS-70 станет достойным дополнением интерьера кухни.",
-                        Img = "/images/Микроволновка.png",  // ИСПРАВЛЕНО: локальный путь
+                        Img = "/images/Микроволновка.png",  
                         Price = 3699,
                         Categorys = _category.AllCategories.First(x => x.Id == 1)
                     },
@@ -33,7 +33,7 @@ namespace Shop_Toshmatovv.Data.Mocks
                         Id = 2,
                         Name = "Samsung MS23K3513AK",
                         Description = "Микроволновая печь Samsung MS23K3513AK с грилем и керамическим покрытием внутренней камеры.",
-                        Img = "/images/Микроволновка 1.png",  // Назови файл соответственно
+                        Img = "/images/Микроволновка 1.png",  
                         Price = 8999,
                         Categorys = _category.AllCategories.First(x => x.Id == 1)
                     },

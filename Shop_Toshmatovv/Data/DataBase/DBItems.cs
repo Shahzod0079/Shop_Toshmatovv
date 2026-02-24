@@ -9,7 +9,7 @@ namespace Shop_Toshmatovv.Data.DataBase
 {
     public class DBItems : IItems
     {
-        public IEnumerable<Categories> Categories = new DBCategory().AllCategories;
+        public IEnumerable<Categorys> Categories = new DBCategory().AllCategories;
 
         public IEnumerable<Items> AllItems
         {

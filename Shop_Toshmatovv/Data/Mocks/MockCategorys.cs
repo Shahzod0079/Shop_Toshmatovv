@@ -5,20 +5,20 @@ namespace Shop_Toshmatovv.Data.Mocks
 {
     public class MockCategorys : ICategorys
     {
-        public IEnumerable<Categories> AllCategories
+        public IEnumerable<Categorys> AllCategories
         {
             get
             {
-                return new List<Categories>
+                return new List<Categorys>
                 {
-                    new Categories()
+                    new Categorys()
                     {
                         Id = 1,
                         Name = "Микроволновые печи",
                         Description = "Микроволновая печь – электроприбор, позволяющий выполнять различные виды работ",
                         Items = new List<Items>()
                     },
-                    new Categories()
+                    new Categorys()
                     {
                         Id = 2,
                         Name = "Мультиварки",

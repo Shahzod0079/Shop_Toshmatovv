@@ -6,6 +6,8 @@ using System.Linq;
 
 namespace Shop_Toshmatovv.Controllers
 {
+
+
     public class ItemsController : Controller
     {
         private IItems IAllItems;
@@ -47,6 +49,14 @@ namespace Shop_Toshmatovv.Controllers
             }
 
             return View(VMItems);
+        }
+        /// <summary> Метод добавления предмета </summary>
+        [HttpGet]
+        public ViewResult Add()
+        {
+            IEnumerable<Categorys> Categorys = IAllCategories.AllCategories;
+
+            return View(Categorys);
         }
     }
 }

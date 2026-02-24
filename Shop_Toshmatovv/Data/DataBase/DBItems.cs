@@ -20,7 +20,6 @@ namespace Shop_Toshmatovv.Data.DataBase
             }
         }
 
-        // Новый метод для поиска
         public IEnumerable<Items> FindItems(string searchString)
         {
             if (string.IsNullOrWhiteSpace(searchString))

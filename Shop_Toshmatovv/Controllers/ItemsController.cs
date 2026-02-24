@@ -2,60 +2,99 @@
 using Shop_Toshmatovv.Data.Interfaces;
 using Shop_Toshmatovv.Data.ViewModell;
 using Shop_Toshmatovv.Data.Models;
-using System.Linq;
+
 
 namespace Shop_Toshmatovv.Controllers
 {
-
-
     public class ItemsController : Controller
     {
-        private IItems IAllItems;
-        private ICategorys IAllCategories;
-        VMItems VMItems = new VMItems();
+        private readonly IItems _iAllItems;
+        private readonly ICategorys _iAllCategories;
+        private readonly IWebHostEnvironment _hostingEnvironment;
+        private VMItems _vMItems = new VMItems();
 
-        public ItemsController(IItems IAllItems, ICategorys IAllCategories)
+        public ItemsController(IItems itemsRepository, ICategorys categoriesRepository, IWebHostEnvironment environment)
         {
-            this.IAllItems = IAllItems;
-            this.IAllCategories = IAllCategories;
+            _iAllItems = itemsRepository;
+            _iAllCategories = categoriesRepository;
+            _hostingEnvironment = environment;
         }
 
         public ViewResult List(int id = 0, string sortOrder = "asc", string searchString = "")
         {
             ViewBag.Title = "Страница с предметами";
-            ViewBag.CurrentSearch = searchString; 
+            ViewBag.CurrentSearch = searchString;
 
             if (!string.IsNullOrWhiteSpace(searchString))
             {
-                VMItems.Items = IAllItems.FindItems(searchString);
+                _vMItems.Items = _iAllItems.FindItems(searchString);
             }
             else
             {
-                VMItems.Items = IAllItems.AllItems;
+                _vMItems.Items = _iAllItems.AllItems;
             }
 
-            VMItems.Categorys = IAllCategories.AllCategories;
-            VMItems.SelectCategory = id;
-            VMItems.SortOrder = sortOrder;
-            VMItems.SearchString = searchString;
+            _vMItems.Categorys = _iAllCategories.AllCategories;
+            _vMItems.SelectCategory = id;
+            _vMItems.SortOrder = sortOrder;
+            _vMItems.SearchString = searchString;
 
             if (sortOrder == "asc")
             {
-                VMItems.Items = VMItems.Items.OrderBy(i => i.Price);
+                _vMItems.Items = _vMItems.Items.OrderBy(i => i.Price);
             }
             else
             {
-                VMItems.Items = VMItems.Items.OrderByDescending(i => i.Price);
+                _vMItems.Items = _vMItems.Items.OrderByDescending(i => i.Price);
             }
 
-            return View(VMItems);
+            return View(_vMItems);
         }
+
         [HttpGet]
         public ViewResult Add()
         {
-            IEnumerable<Categorys> Categorys = IAllCategories.AllCategories;
+            IEnumerable<Categorys> categorys = _iAllCategories.AllCategories;
+            return View(categorys);
+        }
 
-            return View(Categorys);
+        /// <summary>
+        /// Метод добавления предмета
+        /// </summary>
+        /// <param name="name">Наименование предмета</param>
+        /// <param name="description">Описание предмета</param>
+        /// <param name="files">Изображение</param>
+        /// <param name="price">Цена</param>
+        /// <param name="idCategory">Код категории</param>
+        /// <returns></returns>
+        [HttpPost]
+        public RedirectResult Add(string name, string description, IFormFile files, float price, int idCategory)
+        {
+            string fileName = "";
+
+            if (files != null)
+            {
+                fileName = files.FileName;
+                var uploads = Path.Combine(_hostingEnvironment.WebRootPath, "img");
+                var filePath = Path.Combine(uploads, fileName);
+
+                using (var fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    files.CopyTo(fileStream);
+                }
+            }
+
+            Items newItems = new Items
+            {
+                Name = name,
+                Description = description,
+                Img = fileName,
+                Price = Convert.ToInt32(price),
+                Categorys = new Categorys() { Id = idCategory }
+            };
+
+            int id = _iAllItems.Add(newItems);
+            return Redirect("/Items/Update?id=" + id);
         }
     }
 }

@@ -50,7 +50,6 @@ namespace Shop_Toshmatovv.Controllers
 
             return View(VMItems);
         }
-        /// <summary> Метод добавления предмета </summary>
         [HttpGet]
         public ViewResult Add()
         {

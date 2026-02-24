@@ -1,12 +1,17 @@
-using Shop_Toshmatovv.Data.Mocks;
 using Shop_Toshmatovv.Data.Interfaces;
+using Shop_Toshmatovv.Data.DataBase;  // Äîáàâü ıòó ñòğîêó
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllersWithViews();
 
-builder.Services.AddTransient<ICategorys, MockCategorys>();
-builder.Services.AddTransient<IItems, Shop_Toshmatovv.Data.Mocks.MockItems>();
+// ÇÀÌÅÍÈ İÒÈ ÑÒĞÎÊÈ:
+// builder.Services.AddTransient<ICategorys, MockCategorys>();
+// builder.Services.AddTransient<IItems, Shop_Toshmatovv.Data.Mocks.MockItems>();
+
+// ÍÀ İÒÈ:
+builder.Services.AddTransient<ICategorys, DBCategory>();
+builder.Services.AddTransient<IItems, DBItems>();
 
 var app = builder.Build();
 

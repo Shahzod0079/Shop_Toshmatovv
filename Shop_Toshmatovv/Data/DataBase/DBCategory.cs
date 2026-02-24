@@ -16,7 +16,7 @@ namespace Shop_Toshmatovv.Data.DataBase
 
                 MySqlConnection MySqlConnection = Connection.MySqlOpen();
 
-                MySqlDataReader CategorysData = Connection.MySqlQuery("SELECT * FROM Shop.Categorys ORDER BY `Name`;", MySqlConnection);
+                MySqlDataReader CategorysData = Connection.MySqlQuery("SELECT * FROM Categorys ORDER BY `Name`;", MySqlConnection);
 
                 while (CategorysData.Read())
                 {
@@ -29,7 +29,6 @@ namespace Shop_Toshmatovv.Data.DataBase
                     });
                 }
 
-                // возвращаем список категорий
                 return categories;
             }
         }

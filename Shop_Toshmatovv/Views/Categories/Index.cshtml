@@ -18,7 +18,7 @@
                 <div class="category-stats">
                     Товаров в категории: <strong>@(category.Items?.Count() ?? 0)</strong>
                 </div>
-                <a href="@Url.Action("List", "Categories", new { id = category.Id })" class="category-link">
+                <a href="@Url.Action("List", "Items", new { id = category.Id })" class="category-link">
                     Перейти к товарам →
                 </a>
             </div>

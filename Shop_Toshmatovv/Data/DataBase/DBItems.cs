@@ -20,7 +20,7 @@ namespace Shop_Toshmatovv.Data.DataBase
 
                 MySqlConnection MySqlConnection = Connection.MySqlOpen();
 
-                MySqlDataReader ItemsData = Connection.MySqlQuery("SELECT * FROM Shop_Toshmatovv.items ORDER BY `Name`;", MySqlConnection);
+                MySqlDataReader ItemsData = Connection.MySqlQuery("SELECT * FROM Items ORDER BY `Name`;", MySqlConnection);
 
                 while (ItemsData.Read())
                 {

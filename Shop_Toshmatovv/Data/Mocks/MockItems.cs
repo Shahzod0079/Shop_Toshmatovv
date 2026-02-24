@@ -53,7 +53,7 @@ namespace Shop_Toshmatovv.Data.Mocks
                         Description = "Микроволновая печь BBK 20MWS-722S с механическим управлением.",
                         Img = "/images/Микроволновка 3.png",
                         Price = 2999,
-                        Categorys = _category.AllCategories.First(x => x.Id == 1)
+                        Categorys = _category.AllCategories.First(x => x.Id == 2)
                     },
                     new Items()
                     {
@@ -62,7 +62,7 @@ namespace Shop_Toshmatovv.Data.Mocks
                         Description = "Микроволновая печь Panasonic NN-SD366M с инверторным управлением.",
                         Img = "/images/Микроволновка 4.png",
                         Price = 10999,
-                        Categorys = _category.AllCategories.First(x => x.Id == 1)
+                        Categorys = _category.AllCategories.First(x => x.Id == 2)
                     }
                 };
             }

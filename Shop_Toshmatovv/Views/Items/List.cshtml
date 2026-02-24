@@ -6,42 +6,55 @@
     Layout = "_Layout";
 }
 
-<div>
-    <select onChange="SelectCategory(this)">
-        <option value="0">Выбрать ...</option>
-        @foreach (var Category in Model.Categorys)
-        {
-            if (Category.Id == Model.SelectCategory)
+<div style="margin-bottom: 20px; margin-top: 15px; display: flex; align-items: center; gap: 20px; flex-wrap: wrap;">
+    <div>
+        <select onchange="SelectCategory(this)" style="padding: 5px; width: 200px;">
+            <option value="0">Все категории</option>
+            @foreach (var category in Model.Categorys)
             {
-                <option selected="selected" value="@Category.Id">@Category.Name</option>
+                if (category.Id == Model.SelectCategory)
+                {
+                    <option selected="selected" value="@category.Id">@category.Name</option>
+                }
+                else
+                {
+                    <option value="@category.Id">@category.Name</option>
+                }
             }
-            else
-            {
-                <option value="@Category.Id">@Category.Name</option>
-            }
-        }
-    </select>
+        </select>
+    </div>
 
-    <script>
-        function SelectCategory(sender) {
-            window.location = "/Items/List?id=" + sender.value;
-        }
-    </script>
+    <div>
+        <a href="@Url.Action("List", new { id = Model.SelectCategory, sortOrder = "asc" })"
+           style="margin-right: 10px; padding: 5px 10px; background: @(Model.SortOrder == "asc" ? "#007bff" : "#f0f0f0"); color: @(Model.SortOrder == "asc" ? "white" : "black"); text-decoration: none; border-radius: 3px; display: inline-block;">
+            ↑ По возрастанию
+        </a>
+        <a href="@Url.Action("List", new { id = Model.SelectCategory, sortOrder = "desc" })"
+           style="padding: 5px 10px; background: @(Model.SortOrder == "desc" ? "#007bff" : "#f0f0f0"); color: @(Model.SortOrder == "desc" ? "white" : "black"); text-decoration: none; border-radius: 3px; display: inline-block;">
+            ↓ По убыванию
+        </a>
+    </div>
 </div>
+
+<script>
+    function SelectCategory(sender) {
+        window.location = "/Items/List?id=" + sender.value + "&sortOrder=@Model.SortOrder";
+    }
+</script>
 
 <h2>Все предметы</h2>
 
-@foreach (var item in Model.Items)  
+@foreach (var item in Model.Items)
 {
     if (Model.SelectCategory == 0 || item.Categorys.Id == Model.SelectCategory)
     {
-        <div style="border:1px solid #ccc; margin:10px; padding:10px; display:flex; gap:20px;">
+        <div style="border: 1px solid #ccc; margin: 10px 0; padding: 10px; display: flex; gap: 20px;">
             @if (!string.IsNullOrEmpty(item.Img))
             {
-                <img src="@item.Img" alt="@item.Name" style="max-width:200px; max-height:200px;" />
+                <img src="@item.Img" alt="@item.Name" style="max-width: 200px; max-height: 200px;" />
             }
             <div>
-                <h3>Модель: @item.Name</h3>
+                <h3>@item.Name</h3>
                 <p><strong>Цена:</strong> @item.Price.ToString("C")</p>
                 <p><strong>Категория:</strong> @item.Categorys?.Name</p>
                 <p><strong>Описание:</strong> @item.Description</p>

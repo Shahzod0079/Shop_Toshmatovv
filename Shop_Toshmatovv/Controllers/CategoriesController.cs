@@ -15,14 +15,12 @@ namespace Shop_Toshmatovv.Controllers
             _items = items;
         }
 
-        // Отображение всех категорий
         public IActionResult Index()
         {
             var categories = _categories.AllCategories;
             return View(categories);
         }
 
-        // Отображение товаров в конкретной категории
         public IActionResult List(int id)
         {
             var category = _categories.AllCategories.FirstOrDefault(c => c.Id == id);

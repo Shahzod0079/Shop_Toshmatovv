@@ -16,14 +16,14 @@ namespace Shop_Toshmatovv.Data.Mocks
                         Id = 1,
                         Name = "Микроволновые печи",
                         Description = "Микроволновая печь – электроприбор, позволяющий выполнять различные виды работ",
-                        Items = new List<Items>() // Пустой список, без рекурсии
+                        Items = new List<Items>()
                     },
                     new Categories()
                     {
                         Id = 2,
                         Name = "Мультиварки",
                         Description = "Мультиварка – многофункциональный бытовой прибор для приготовления пищи",
-                        Items = new List<Items>() // Пустой список
+                        Items = new List<Items>() 
                     }
                 };
             }

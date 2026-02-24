@@ -4,6 +4,7 @@ using Shop_Toshmatovv.Data.Models;
 using System.Collections.Generic;
 using System.Linq;
 using MySql.Data.MySqlClient;
+using System;
 
 namespace Shop_Toshmatovv.Data.DataBase
 {
@@ -15,11 +16,29 @@ namespace Shop_Toshmatovv.Data.DataBase
         {
             get
             {
+                return GetItemsFromDb();
+            }
+        }
 
-                List<Items> items = new List<Items>();
+        // Новый метод для поиска
+        public IEnumerable<Items> FindItems(string searchString)
+        {
+            if (string.IsNullOrWhiteSpace(searchString))
+                return AllItems;
 
-                MySqlConnection MySqlConnection = Connection.MySqlOpen();
+            var allItems = GetItemsFromDb();
+            return allItems.Where(i =>
+                i.Name.IndexOf(searchString, StringComparison.OrdinalIgnoreCase) >= 0 ||
+                i.Description.IndexOf(searchString, StringComparison.OrdinalIgnoreCase) >= 0
+            );
+        }
 
+        private List<Items> GetItemsFromDb()
+        {
+            List<Items> items = new List<Items>();
+
+            using (MySqlConnection MySqlConnection = Connection.MySqlOpen())
+            {
                 MySqlDataReader ItemsData = Connection.MySqlQuery("SELECT * FROM Items ORDER BY `Name`;", MySqlConnection);
 
                 while (ItemsData.Read())
@@ -31,14 +50,12 @@ namespace Shop_Toshmatovv.Data.DataBase
                         Description = ItemsData.IsDBNull(2) ? "" : ItemsData.GetString(2),
                         Img = ItemsData.IsDBNull(3) ? "" : ItemsData.GetString(3),
                         Price = ItemsData.IsDBNull(4) ? -1 : ItemsData.GetInt32(4),
-                        Categorys = ItemsData.IsDBNull(5) ? null : Categories.Where(x => x.Id == ItemsData.GetInt32(5)).First()
+                        Categorys = ItemsData.IsDBNull(5) ? null : Categories.FirstOrDefault(x => x.Id == ItemsData.GetInt32(5))
                     });
                 }
-
-                MySqlConnection.Close();
-
-                return items;
             }
+
+            return items;
         }
     }
 }

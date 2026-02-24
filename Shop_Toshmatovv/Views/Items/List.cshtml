@@ -6,59 +6,80 @@
     Layout = "_Layout";
 }
 
-<div style="margin-bottom: 20px; margin-top: 15px; display: flex; align-items: center; gap: 20px; flex-wrap: wrap;">
-    <div>
-        <select onchange="SelectCategory(this)" style="padding: 5px; width: 200px;">
-            <option value="0">Все категории</option>
-            @foreach (var category in Model.Categorys)
-            {
-                if (category.Id == Model.SelectCategory)
-                {
-                    <option selected="selected" value="@category.Id">@category.Name</option>
-                }
-                else
-                {
-                    <option value="@category.Id">@category.Name</option>
-                }
-            }
-        </select>
+<div style="margin-bottom: 20px; margin-top: 15px;">
+    <div style="margin-bottom: 15px;">
+        <form method="get" action="@Url.Action("List")">
+            <input type="text" name="searchString" value="@Model.SearchString"
+                   placeholder="Поиск по названию или описанию..."
+                   style="padding: 8px; width: 300px; margin-right: 10px;" />
+            <input type="hidden" name="id" value="@Model.SelectCategory" />
+            <input type="hidden" name="sortOrder" value="@Model.SortOrder" />
+            <button type="submit" style="padding: 8px 15px; background: #28a745; color: white; border: none; border-radius: 3px; cursor: pointer;">
+                Найти
+            </button>
+        </form>
     </div>
+    <div style="display: flex; align-items: center; gap: 20px; flex-wrap: wrap;">
+        <div>
+            <select onchange="SelectCategory(this)" style="padding: 5px; width: 200px;">
+                <option value="0">Все категории</option>
+                @foreach (var category in Model.Categorys)
+                {
+                    if (category.Id == Model.SelectCategory)
+                    {
+                        <option selected="selected" value="@category.Id">@category.Name</option>
+                    }
+                    else
+                    {
+                        <option value="@category.Id">@category.Name</option>
+                    }
+                }
+            </select>
+        </div>
 
-    <div>
-        <a href="@Url.Action("List", new { id = Model.SelectCategory, sortOrder = "asc" })"
-           style="margin-right: 10px; padding: 5px 10px; background: @(Model.SortOrder == "asc" ? "#007bff" : "#f0f0f0"); color: @(Model.SortOrder == "asc" ? "white" : "black"); text-decoration: none; border-radius: 3px; display: inline-block;">
-            ↑ По возрастанию
-        </a>
-        <a href="@Url.Action("List", new { id = Model.SelectCategory, sortOrder = "desc" })"
-           style="padding: 5px 10px; background: @(Model.SortOrder == "desc" ? "#007bff" : "#f0f0f0"); color: @(Model.SortOrder == "desc" ? "white" : "black"); text-decoration: none; border-radius: 3px; display: inline-block;">
-            ↓ По убыванию
-        </a>
+        <div>
+            <a href="@Url.Action("List", new { id = Model.SelectCategory, sortOrder = "asc", searchString = Model.SearchString })"
+               style="margin-right: 10px; padding: 5px 10px; background: @(Model.SortOrder == "asc" ? "#007bff" : "#f0f0f0"); color: @(Model.SortOrder == "asc" ? "white" : "black"); text-decoration: none; border-radius: 3px; display: inline-block;">
+                ↑ По возрастанию
+            </a>
+            <a href="@Url.Action("List", new { id = Model.SelectCategory, sortOrder = "desc", searchString = Model.SearchString })"
+               style="padding: 5px 10px; background: @(Model.SortOrder == "desc" ? "#007bff" : "#f0f0f0"); color: @(Model.SortOrder == "desc" ? "white" : "black"); text-decoration: none; border-radius: 3px; display: inline-block;">
+                ↓ По убыванию
+            </a>
+        </div>
     </div>
 </div>
 
 <script>
     function SelectCategory(sender) {
-        window.location = "/Items/List?id=" + sender.value + "&sortOrder=@Model.SortOrder";
+        window.location = "/Items/List?id=" + sender.value + "&sortOrder=@Model.SortOrder&searchString=@Model.SearchString";
     }
 </script>
 
 <h2>Все предметы</h2>
 
-@foreach (var item in Model.Items)
+@if (!Model.Items.Any())
 {
-    if (Model.SelectCategory == 0 || item.Categorys.Id == Model.SelectCategory)
+    <p>Ничего не найдено</p>
+}
+else
+{
+    @foreach (var item in Model.Items)
     {
-        <div style="border: 1px solid #ccc; margin: 10px 0; padding: 10px; display: flex; gap: 20px;">
-            @if (!string.IsNullOrEmpty(item.Img))
-            {
-                <img src="@item.Img" alt="@item.Name" style="max-width: 200px; max-height: 200px;" />
-            }
-            <div>
-                <h3>@item.Name</h3>
-                <p><strong>Цена:</strong> @item.Price.ToString("C")</p>
-                <p><strong>Категория:</strong> @item.Categorys?.Name</p>
-                <p><strong>Описание:</strong> @item.Description</p>
+        if (Model.SelectCategory == 0 || item.Categorys.Id == Model.SelectCategory)
+        {
+            <div style="border: 1px solid #ccc; margin: 10px 0; padding: 10px; display: flex; gap: 20px;">
+                @if (!string.IsNullOrEmpty(item.Img))
+                {
+                    <img src="@item.Img" alt="@item.Name" style="max-width: 200px; max-height: 200px;" />
+                }
+                <div>
+                    <h3>@item.Name</h3>
+                    <p><strong>Цена:</strong> @item.Price.ToString("C")</p>
+                    <p><strong>Категория:</strong> @item.Categorys?.Name</p>
+                    <p><strong>Описание:</strong> @item.Description</p>
+                </div>
             </div>
-        </div>
+        }
     }
 }

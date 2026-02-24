@@ -18,14 +18,24 @@ namespace Shop_Toshmatovv.Controllers
             this.IAllCategories = IAllCategories;
         }
 
-        public ViewResult List(int id = 0, string sortOrder = "asc")
+        public ViewResult List(int id = 0, string sortOrder = "asc", string searchString = "")
         {
             ViewBag.Title = "Страница с предметами";
+            ViewBag.CurrentSearch = searchString; 
 
-            VMItems.Items = IAllItems.AllItems;
+            if (!string.IsNullOrWhiteSpace(searchString))
+            {
+                VMItems.Items = IAllItems.FindItems(searchString);
+            }
+            else
+            {
+                VMItems.Items = IAllItems.AllItems;
+            }
+
             VMItems.Categorys = IAllCategories.AllCategories;
             VMItems.SelectCategory = id;
             VMItems.SortOrder = sortOrder;
+            VMItems.SearchString = searchString;
 
             if (sortOrder == "asc")
             {

@@ -67,5 +67,10 @@ namespace Shop_Toshmatovv.Data.Mocks
                 };
             }
         }
+
+        public IEnumerable<Items> FindItems(string searchString)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -9,5 +9,6 @@ namespace Shop_Toshmatovv.Data.ViewModell
         public IEnumerable<Categorys> Categorys { get; set; }
         public int SelectCategory { get; set; }
         public string SortOrder { get; set; } = "asc";
+        public string SearchString { get; set; } = ""; 
     }
 }

@@ -8,7 +8,11 @@
     <div class="header">
         <img src="/images/location_14790627.png" />
 
-        <input class="search" placeholder="Поиск по сайту" />
+        <form method="get" action="@Url.Action("List", "Items")" style="display: inline;">
+            <input class="search" name="searchString" placeholder="Поиск по сайту"
+                   value="@(ViewBag.CurrentSearch ?? "")" />
+            <button type="submit" style="display: none;">Найти</button>
+        </form>
 
         <div class="nav-links">
             <a href="@Url.Action("List", "Items")" class="nav-link">Все товары</a>

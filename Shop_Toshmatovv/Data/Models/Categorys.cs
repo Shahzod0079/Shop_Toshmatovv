@@ -12,5 +12,6 @@ namespace Shop_Toshmatovv.Data.Models
         public string Description { get; set; }
 
         public List<Items> Items { get; set; }
+
     }
 }

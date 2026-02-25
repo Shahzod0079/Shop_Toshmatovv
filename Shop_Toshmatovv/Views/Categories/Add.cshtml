@@ -1,0 +1,47 @@
+﻿@{
+    ViewBag.Title = "Добавление категории";
+    Layout = "_Layout";
+}
+<select name="idCategory" required>
+    @foreach (var category in Model)
+    {
+        if (ViewBag.SelectedCategoryId != null && category.Id == ViewBag.SelectedCategoryId)
+        {
+                    <option selected value="@category.Id">@category.Name</option>
+        }
+        else
+        {
+                    <option value="@category.Id">@category.Name</option>
+        }
+    }
+</select>
+<div class="add-form">
+    <h2>Добавление категории</h2>
+
+    @if (!string.IsNullOrEmpty(ViewBag.Error))
+    {
+        <div style="color: red; margin-bottom: 15px; padding: 10px; background: #ffeeee; border-radius: 4px;">
+            @ViewBag.Error
+        </div>
+    }
+
+    <form method="post">
+        <div class="form-group">
+            <label class="required">Название категории:</label>
+            <input type="text" name="name" placeholder="Введите название категории" required />
+        </div>
+
+        <div class="form-group">
+            <label>Описание:</label>
+            <textarea name="description" placeholder="Введите описание категории" rows="4"></textarea>
+        </div>
+
+        <div class="button-group">
+            <button type="submit" class="btn-submit">Добавить</button>
+            <a href="@(ViewBag.CategoryId != null ? Url.Action("List", "Categories", new { id = ViewBag.CategoryId }) : Url.Action("List", "Items"))"
+               class="btn-cancel">
+                Отмена
+            </a>
+        </div>
+    </form>
+</div>

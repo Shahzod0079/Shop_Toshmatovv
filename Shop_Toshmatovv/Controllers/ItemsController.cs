@@ -22,6 +22,8 @@ namespace Shop_Toshmatovv.Controllers
         [HttpGet]
         public ViewResult List(int id = 0, string sortOrder = "asc", string searchString = "")
         {
+
+
             ViewBag.Title = "Страница с предметами";
             ViewBag.CurrentSearch = searchString;
 
@@ -53,10 +55,13 @@ namespace Shop_Toshmatovv.Controllers
             return View(_vMItems);
         }
         [HttpGet]
-        public ViewResult Add()
+        public IActionResult Add(int? categoryId = null)  
         {
-            IEnumerable<Categorys> categorys = _iAllCategorys.AllCategories;
-            return View(categorys);
+            IEnumerable<Categorys> categories = _iAllCategorys.AllCategories;
+
+            ViewBag.CategoryId = categoryId;
+
+            return View(categories);
         }
 
         [HttpPost]
@@ -92,35 +97,43 @@ namespace Shop_Toshmatovv.Controllers
             };
 
             _iAllItems.Add(newItems);
-            return Redirect("/Items/List");
+
+            if (Request.Query.ContainsKey("categoryId"))
+            {
+                int categoryId = int.Parse(Request.Query["categoryId"]);
+                return Redirect($"/Categories/List?id={categoryId}");
+            }
+
+            return Redirect($"/Categories/List?id={idCategory}");
         }
 
         [HttpGet]
-        public IActionResult Update(int id)  
+        public IActionResult Update(int id)
         {
             var item = _iAllItems.GetItem(id);
-
-            if (item == null)
-            {
-                return Redirect("/Items/List");
-            }
+            if (item == null) return Redirect("/Items/List");
 
             var categories = _iAllCategorys.AllCategories;
+
+            if (Request.Query.ContainsKey("categoryId"))
+            {
+                ViewBag.CategoryId = int.Parse(Request.Query["categoryId"]);
+            }
 
             ViewBag.Categories = categories;
             return View(item);
         }
         [HttpPost]
-        public RedirectResult Update(int id, string name, string description, IFormFile files, float price, int idCategory)
+        public IActionResult Update(int id, string name, string description, IFormFile files, float price, int idCategory)
         {
-            var item = _iAllItems.GetItem(id); 
+            var item = _iAllItems.GetItem(id);
 
             string fileName = item.Img;
 
             if (files != null)
             {
                 fileName = files.FileName;
-                var uploads = Path.Combine(_hostingEnvironment.WebRootPath, "Image");
+                var uploads = Path.Combine(_hostingEnvironment.WebRootPath, "Images");
                 var filePath = Path.Combine(uploads, fileName);
 
                 using (var fileStream = new FileStream(filePath, FileMode.Create))
@@ -139,14 +152,27 @@ namespace Shop_Toshmatovv.Controllers
                 Categorys = new Categorys { Id = idCategory }
             };
 
-            _iAllItems.Update(updatedItem);  
+            _iAllItems.Update(updatedItem);
+
+            if (Request.Query.ContainsKey("categoryId"))
+            {
+                int categoryId = int.Parse(Request.Query["categoryId"]);
+                return Redirect($"/Categories/List?id={categoryId}");
+            }
+
             return Redirect("/Items/List");
         }
-
         [HttpGet]
-        public RedirectResult Delete(int id)
+        public IActionResult Delete(int id)
         {
-            _iAllItems.Delete(id);  
+            _iAllItems.Delete(id);
+
+            if (Request.Query.ContainsKey("categoryId"))
+            {
+                int categoryId = int.Parse(Request.Query["categoryId"]);
+                return Redirect($"/Categories/List?id={categoryId}");
+            }
+
             return Redirect("/Items/List");
         }
     }

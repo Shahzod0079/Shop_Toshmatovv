@@ -3,6 +3,7 @@ using Shop_Toshmatovv.Data.Common;
 using Shop_Toshmatovv.Data.Interfaces;
 using Shop_Toshmatovv.Data.Models;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Shop_Toshmatovv.Data.DataBase
 {
@@ -13,23 +14,52 @@ namespace Shop_Toshmatovv.Data.DataBase
             get
             {
                 List<Categorys> categories = new List<Categorys>();
-
-                MySqlConnection MySqlConnection = Connection.MySqlOpen();
-
-                MySqlDataReader CategorysData = Connection.MySqlQuery("SELECT * FROM Categorys ORDER BY `Name`;", MySqlConnection);
-
-                while (CategorysData.Read())
+                using (MySqlConnection connection = Connection.MySqlOpen())
                 {
-
-                    categories.Add(new Categorys()
+                    MySqlDataReader reader = Connection.MySqlQuery("SELECT * FROM Categorys ORDER BY Name;", connection);
+                    while (reader.Read())
                     {
-                        Id = CategorysData.IsDBNull(0) ? -1 : CategorysData.GetInt32(0),
-                        Name = CategorysData.IsDBNull(1) ? null : CategorysData.GetString(1),
-                        Description = CategorysData.IsDBNull(2) ? null : CategorysData.GetString(2)
-                    });
+                        categories.Add(new Categorys()
+                        {
+                            Id = reader.GetInt32(0),
+                            Name = reader.GetString(1),
+                            Description = reader.GetString(2)
+                        });
+                    }
                 }
-
                 return categories;
+            }
+        }
+
+        public Categorys GetCategory(int id)
+        {
+            return AllCategories.FirstOrDefault(c => c.Id == id);
+        }
+
+        public void Add(Categorys category)
+        {
+            using (MySqlConnection connection = Connection.MySqlOpen())
+            {
+                string query = $"INSERT INTO Categorys (Name, Description) VALUES ('{category.Name}', '{category.Description}')";
+                Connection.MySqlQuery(query, connection);
+            }
+        }
+
+        public void Update(Categorys category)
+        {
+            using (MySqlConnection connection = Connection.MySqlOpen())
+            {
+                string query = $"UPDATE Categorys SET Name = '{category.Name}', Description = '{category.Description}' WHERE Id = {category.Id}";
+                Connection.MySqlQuery(query, connection);
+            }
+        }
+
+        public void Delete(int id)
+        {
+            using (MySqlConnection connection = Connection.MySqlOpen())
+            {
+                string query = $"DELETE FROM Categorys WHERE Id = {id}";
+                Connection.MySqlQuery(query, connection);
             }
         }
     }

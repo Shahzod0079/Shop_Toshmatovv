@@ -68,10 +68,17 @@
                 </select>
             </div>
         </div>
-
+        @if (ViewBag.CategoryId != null)
+        {
+            <input type="hidden" name="categoryId" value="@ViewBag.CategoryId" />
+        }
         <div class="button-group">
             <button type="submit" class="btn-save">Сохранить</button>
-            <a href="/Items/List" class="btn-cancel">Отмена</a>
+            <a href="@(ViewBag.CategoryId != null ? Url.Action("List", "Categories", new { id = ViewBag.CategoryId }) : Url.Action("List", "Items"))"
+               class="btn-cancel">
+                Отмена
+            </a>
+
         </div>
     </form>
 </div>

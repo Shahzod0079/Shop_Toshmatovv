@@ -10,7 +10,13 @@ namespace Shop_Toshmatovv.Data.DataBase
 {
     public class DBItems : IItems
     {
-        public IEnumerable<Categorys> Categories = new DBCategory().AllCategories;
+        private IEnumerable<Categorys> _categories;
+
+        public DBItems()
+        {
+            // Загружаем категории в конструкторе
+            _categories = new DBCategory().AllCategories.ToList();
+        }
 
         public IEnumerable<Items> AllItems
         {
@@ -42,6 +48,12 @@ namespace Shop_Toshmatovv.Data.DataBase
 
                 while (ItemsData.Read())
                 {
+                    // ПОЛУЧАЕМ ID КАТЕГОРИИ (6-я колонка, индекс 5)
+                    int categoryId = ItemsData.IsDBNull(5) ? 0 : ItemsData.GetInt32(5);
+
+                    // НАХОДИМ КАТЕГОРИЮ
+                    Categorys category = _categories.FirstOrDefault(x => x.Id == categoryId);
+
                     items.Add(new Items()
                     {
                         Id = ItemsData.IsDBNull(0) ? -1 : ItemsData.GetInt32(0),
@@ -49,41 +61,44 @@ namespace Shop_Toshmatovv.Data.DataBase
                         Description = ItemsData.IsDBNull(2) ? "" : ItemsData.GetString(2),
                         Img = ItemsData.IsDBNull(3) ? "" : ItemsData.GetString(3),
                         Price = ItemsData.IsDBNull(4) ? -1 : ItemsData.GetInt32(4),
-                        Categorys = ItemsData.IsDBNull(5) ? null : Categories.FirstOrDefault(x => x.Id == ItemsData.GetInt32(5))
+                        Categorys = category ?? new Categorys() { Id = categoryId, Name = "Неизвестно" }
                     });
                 }
             }
 
             return items;
         }
+
         public int Add(Items Item)
         {
-            MySqlConnection MySqlConnection = Connection.MySqlOpen();
-
-            Connection.MySqlQuery(
-                $"INSERT INTO `items`(`Name`, `Description`, `Img`, `Price`, `IdCategory`) VALUES ('{Item.Name}', '{Item.Description}', '{Item.Img}', {Item.Price}, {Item.Categorys.Id});",
-                MySqlConnection);
-
-            MySqlConnection.Close();
+            using (MySqlConnection MySqlConnection = Connection.MySqlOpen())
+            {
+                Connection.MySqlQuery(
+                    $"INSERT INTO `items`(`Name`, `Description`, `Img`, `Price`, `IdCategory`) VALUES ('{Item.Name}', '{Item.Description}', '{Item.Img}', {Item.Price}, {Item.Categorys.Id});",
+                    MySqlConnection);
+            }
 
             int IdItem = -1;
 
-            MySqlConnection = Connection.MySqlOpen();
-
-            MySqlDataReader mySqlDataReaderItem = Connection.MySqlQuery(
-                $"SELECT `Id` FROM `items` WHERE `Name` = '{Item.Name}' AND `Description` = '{Item.Description}' AND `Price` = {Item.Price} AND `IdCategory` = {Item.Categorys.Id};",
-                MySqlConnection);
-
-            if (mySqlDataReaderItem.HasRows)
+            using (MySqlConnection MySqlConnection = Connection.MySqlOpen())
             {
-                mySqlDataReaderItem.Read();
-                IdItem = mySqlDataReaderItem.GetInt32(0);
+                MySqlDataReader mySqlDataReaderItem = Connection.MySqlQuery(
+                    $"SELECT `Id` FROM `items` WHERE `Name` = '{Item.Name}' AND `Description` = '{Item.Description}' AND `Price` = {Item.Price} AND `IdCategory` = {Item.Categorys.Id};",
+                    MySqlConnection);
+
+                if (mySqlDataReaderItem.HasRows)
+                {
+                    mySqlDataReaderItem.Read();
+                    IdItem = mySqlDataReaderItem.GetInt32(0);
+                }
             }
 
-            MySqlConnection.Close();
+            // Обновляем категории после добавления
+            _categories = new DBCategory().AllCategories.ToList();
 
             return IdItem;
         }
+
         public Items GetItem(int id)
         {
             return AllItems.FirstOrDefault(i => i.Id == id);
@@ -103,6 +118,9 @@ namespace Shop_Toshmatovv.Data.DataBase
 
                 Connection.MySqlQuery(query, connection);
             }
+
+            // Обновляем категории после изменения
+            _categories = new DBCategory().AllCategories.ToList();
         }
 
         public void Delete(int id)
@@ -112,6 +130,9 @@ namespace Shop_Toshmatovv.Data.DataBase
                 string query = $"DELETE FROM Items WHERE Id = {id}";
                 Connection.MySqlQuery(query, connection);
             }
+
+            // Обновляем категории после удаления
+            _categories = new DBCategory().AllCategories.ToList();
         }
     }
 }

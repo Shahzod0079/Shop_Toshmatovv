@@ -6,22 +6,47 @@
     Layout = "_Layout";
 }
 
-<div class="categories-page">
-    <h2 class="page-title">Категории товаров</h2>
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; margin-top: 20px;">
+    <h2>Категории товаров</h2>
+    <a href="@Url.Action("Add")" style="background: #28a745; color: white; padding: 8px 20px; text-decoration: none; border-radius: 3px; font-weight: bold;">
+        + Добавить категорию
+    </a>
+</div>
 
-    <div class="categories-grid">
-        @foreach (var category in Model)
-        {
-            <div class="category-card">
-                <h3 class="category-name">@category.Name</h3>
-                <p class="category-description">@category.Description</p>
-                <div class="category-stats">
-                    Товаров в категории: <strong>@(category.Items?.Count() ?? 0)</strong>
-                </div>
-                <a href="@Url.Action("List", "Items", new { id = category.Id })" class="category-link">
-                    Перейти к товарам →
-                </a>
-            </div>
-        }
+@if (TempData["Message"] != null)
+{
+    <div style="background: #d4edda; color: #155724; padding: 15px; margin-bottom: 20px; border-radius: 4px;">
+        @TempData["Message"]
     </div>
+}
+
+<div class="categories-grid">
+    @foreach (var category in Model)
+    {
+        <div class="category-card">
+            <h3 class="category-name">@category.Name</h3>
+            <p class="category-description">@category.Description</p>
+            <div class="category-stats">
+                Товаров в категории:
+                <strong>@ViewData["Count_" + category.Id]</strong>
+            </div>
+
+            <div style="display: flex; gap: 10px; margin: 15px 0;">
+                <a href="@Url.Action("Edit", new { id = category.Id })"
+                   style="background: #ffc107; color: black; padding: 8px 0; text-decoration: none; border-radius: 3px; width: 80px; text-align: center; display: inline-block;">
+                    Изменить
+                </a>
+                <form method="post" action="@Url.Action("Delete", new { id = category.Id })"
+                      onsubmit="return confirm('Удалить категорию @category.Name?')" style="margin: 0; padding: 0; box-shadow: none; width: 80px;">
+                    <button type="submit" style="background: #dc3545; color: white; padding: 8px 0; border: none; border-radius: 3px; cursor: pointer; width: 100%;">
+                        Удалить
+                    </button>
+                </form>
+            </div>
+
+            <a href="@Url.Action("List", new { id = category.Id })" class="category-link" style="margin-top: 10px;">
+                Перейти к товарам 
+            </a>
+        </div>
+    }
 </div>

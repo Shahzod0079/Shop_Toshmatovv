@@ -1,0 +1,37 @@
+﻿@using Shop_Toshmatovv.Data.Models
+@model Categorys
+
+@{
+    ViewBag.Title = "Редактирование категории";
+    Layout = "_Layout";
+}
+
+<div class="add-form">
+    <h2>Редактирование категории</h2>
+
+    @if (!string.IsNullOrEmpty(ViewBag.Error))
+    {
+        <div style="color: red; margin-bottom: 15px; padding: 10px; background: #ffeeee; border-radius: 4px;">
+            @ViewBag.Error
+        </div>
+    }
+
+    <form method="post">
+        <input type="hidden" name="Id" value="@Model.Id" />
+
+        <div class="form-group">
+            <label class="required">Название категории:</label>
+            <input type="text" name="Name" value="@Model.Name" placeholder="Введите название категории" required />
+        </div>
+
+        <div class="form-group">
+            <label>Описание:</label>
+            <textarea name="Description" placeholder="Введите описание категории" rows="4">@Model.Description</textarea>
+        </div>
+
+        <div class="button-group">
+            <button type="submit" class="btn-submit">Сохранить</button>
+            <a href="@Url.Action("Index")" class="btn-cancel">Отмена</a>
+        </div>
+    </form>
+</div>

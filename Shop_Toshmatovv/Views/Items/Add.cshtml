@@ -43,29 +43,12 @@
 
         <div class="button-group">
             <button type="submit" class="btn-submit" id="submitBtn">Добавить</button>
-            <a href="/Items/List" class="btn-cancel">Отмена</a>
+
+            <a href="@(ViewBag.CategoryId != null ? Url.Action("List", "Categories", new { id = ViewBag.CategoryId }) : Url.Action("List", "Items"))"
+               class="btn-cancel">
+                Отмена
+            </a>
         </div>
     </form>
 </div>
 
-<script>
-    document.getElementById('addForm').addEventListener('submit', function(e) {
-        e.preventDefault();
-
-        var formData = new FormData(this);
-
-        fetch('/Items/Add', {
-            method: 'POST',
-            body: formData
-        })
-        .then(response => {
-            if (response.redirected) {
-                alert('Данные успешно добавлены!');
-                window.location.href = '/Items/List';
-            }
-        })
-        .catch(error => {
-            alert('Произошла ошибка при добавлении');
-        });
-    });
-</script>

@@ -6,22 +6,10 @@
     Layout = "_Layout";
 }
 
-<div style="margin-bottom: 20px; margin-top: 15px;">
-    <div style="margin-bottom: 15px;">
-        <form method="get" action="@Url.Action("List")">
-            <input type="text" name="searchString" value="@Model.SearchString"
-                   placeholder="Поиск по названию или описанию..."
-                   style="padding: 8px; width: 300px; margin-right: 10px;" />
-            <input type="hidden" name="id" value="@Model.SelectCategory" />
-            <input type="hidden" name="sortOrder" value="@Model.SortOrder" />
-            <button type="submit" style="padding: 8px 15px; background: #28a745; color: white; border: none; border-radius: 3px; cursor: pointer;">
-                Найти
-            </button>
-        </form>
-    </div>
+<div style="margin-top: 20px; margin-bottom: 20px;">
     <div style="display: flex; align-items: center; gap: 20px; flex-wrap: wrap;">
         <div>
-            <select onchange="SelectCategory(this)" style="padding: 5px; width: 200px;">
+            <select onchange="SelectCategory(this)" style="padding: 5px; width: 180px;">
                 <option value="0">Все категории</option>
                 @foreach (var category in Model.Categorys)
                 {
@@ -39,14 +27,19 @@
 
         <div>
             <a href="@Url.Action("List", new { id = Model.SelectCategory, sortOrder = "asc", searchString = Model.SearchString })"
-               style="margin-right: 10px; padding: 5px 10px; background: @(Model.SortOrder == "asc" ? "#007bff" : "#f0f0f0"); color: @(Model.SortOrder == "asc" ? "white" : "black"); text-decoration: none; border-radius: 3px; display: inline-block;">
+               style="margin-right: 5px; padding: 5px 10px; background: @(Model.SortOrder == "asc" ? "#007bff" : "#f0f0f0"); color: @(Model.SortOrder == "asc" ? "white" : "black"); text-decoration: none; border-radius: 3px;">
                 ↑ По возрастанию
             </a>
             <a href="@Url.Action("List", new { id = Model.SelectCategory, sortOrder = "desc", searchString = Model.SearchString })"
-               style="padding: 5px 10px; background: @(Model.SortOrder == "desc" ? "#007bff" : "#f0f0f0"); color: @(Model.SortOrder == "desc" ? "white" : "black"); text-decoration: none; border-radius: 3px; display: inline-block;">
+               style="padding: 5px 10px; background: @(Model.SortOrder == "desc" ? "#007bff" : "#f0f0f0"); color: @(Model.SortOrder == "desc" ? "white" : "black"); text-decoration: none; border-radius: 3px;">
                 ↓ По убыванию
             </a>
         </div>
+
+        <a href="/Items/Add"
+           style="background: #28a745; color: white; padding: 6px 15px; text-decoration: none; border-radius: 3px; font-weight: bold;">
+            + Добавить
+        </a>
     </div>
 </div>
 
@@ -71,13 +64,24 @@ else
             <div style="border: 1px solid #ccc; margin: 10px 0; padding: 10px; display: flex; gap: 20px;">
                 @if (!string.IsNullOrEmpty(item.Img))
                 {
-                    <img src="@item.Img" alt="@item.Name" style="max-width: 200px; max-height: 200px;" />
+                    string imagePath = item.Img.StartsWith("/") ? item.Img : "/Images/" + item.Img;
+                    <img src="@imagePath" alt="@item.Name" style="max-width: 200px; max-height: 200px;"
+                         onerror="this.onerror=null; this.src='/Images/no-image.png';" />
+                }
+                else
+                {
+                    <img src="/Images/no-image.png" alt="Нет изображения" style="max-width: 200px; max-height: 200px;" />
                 }
                 <div>
                     <h3>@item.Name</h3>
                     <p><strong>Цена:</strong> @item.Price.ToString("C")</p>
                     <p><strong>Категория:</strong> @item.Categorys?.Name</p>
                     <p><strong>Описание:</strong> @item.Description</p>
+
+                    <div style="margin-top: 10px;">
+                        <a href="/Items/Update/@item.Id" style="background: #ffc107; padding: 5px 10px; text-decoration: none; color: black; border-radius: 3px; margin-right: 5px;">Изменить</a>
+                        <a href="/Items/Delete/@item.Id" onclick="return confirm('Удалить?')" style="background: #dc3545; padding: 5px 10px; text-decoration: none; color: white; border-radius: 3px;">Удалить</a>
+                    </div>
                 </div>
             </div>
         }

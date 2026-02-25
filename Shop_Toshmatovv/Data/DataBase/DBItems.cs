@@ -56,5 +56,62 @@ namespace Shop_Toshmatovv.Data.DataBase
 
             return items;
         }
+        public int Add(Items Item)
+        {
+            MySqlConnection MySqlConnection = Connection.MySqlOpen();
+
+            Connection.MySqlQuery(
+                $"INSERT INTO `items`(`Name`, `Description`, `Img`, `Price`, `IdCategory`) VALUES ('{Item.Name}', '{Item.Description}', '{Item.Img}', {Item.Price}, {Item.Categorys.Id});",
+                MySqlConnection);
+
+            MySqlConnection.Close();
+
+            int IdItem = -1;
+
+            MySqlConnection = Connection.MySqlOpen();
+
+            MySqlDataReader mySqlDataReaderItem = Connection.MySqlQuery(
+                $"SELECT `Id` FROM `items` WHERE `Name` = '{Item.Name}' AND `Description` = '{Item.Description}' AND `Price` = {Item.Price} AND `IdCategory` = {Item.Categorys.Id};",
+                MySqlConnection);
+
+            if (mySqlDataReaderItem.HasRows)
+            {
+                mySqlDataReaderItem.Read();
+                IdItem = mySqlDataReaderItem.GetInt32(0);
+            }
+
+            MySqlConnection.Close();
+
+            return IdItem;
+        }
+        public Items GetItem(int id)
+        {
+            return AllItems.FirstOrDefault(i => i.Id == id);
+        }
+
+        public void Update(Items item)
+        {
+            using (MySqlConnection connection = Connection.MySqlOpen())
+            {
+                string query = $"UPDATE Items SET " +
+                               $"Name = '{item.Name}', " +
+                               $"Description = '{item.Description}', " +
+                               $"Img = '{item.Img}', " +
+                               $"Price = {item.Price}, " +
+                               $"IdCategory = {item.Categorys.Id} " +
+                               $"WHERE Id = {item.Id}";
+
+                Connection.MySqlQuery(query, connection);
+            }
+        }
+
+        public void Delete(int id)
+        {
+            using (MySqlConnection connection = Connection.MySqlOpen())
+            {
+                string query = $"DELETE FROM Items WHERE Id = {id}";
+                Connection.MySqlQuery(query, connection);
+            }
+        }
     }
 }

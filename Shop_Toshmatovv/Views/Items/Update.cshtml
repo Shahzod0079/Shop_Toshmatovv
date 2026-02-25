@@ -1,0 +1,77 @@
+﻿@using Shop_Toshmatovv.Data.Models
+@model Items
+
+
+
+@{
+    Layout = "_Layout";
+
+    // Проверка на null
+    if (Model == null)
+    {
+        <div style="text-align: center; padding: 50px;">
+            <h2>Товар не найден</h2>
+            <a href="/Items/List" style="background: #28a745; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">Вернуться к списку</a>
+        </div>
+        return;
+    }
+
+    var categories = ViewBag.Categories as IEnumerable<Categorys>;
+}
+
+<div class="edit-form">
+    <h2>Редактирование товара</h2>
+
+    <form method="post" enctype="multipart/form-data">
+        <div class="form-group">
+            <label class="required">Наименование:</label>
+            <input type="text" name="name" value="@Model.Name" placeholder="Введите наименование" required />
+        </div>
+
+        <div class="form-group">
+            <label class="required">Описание:</label>
+            <textarea name="description" placeholder="Введите описание" required>@Model.Description</textarea>
+        </div>
+
+        <div class="form-group">
+            <label>Изображение:</label>
+            <div class="image-preview">
+                @if (!string.IsNullOrEmpty(Model.Img))
+                {
+                    <img src="@Model.Img" alt="@Model.Name" />
+                }
+                <input type="file" name="files" accept="image/*" />
+                <small>Оставьте пустым, чтобы не менять изображение</small>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group half">
+                <label class="required">Стоимость (₽):</label>
+                <input type="number" name="price" value="@Model.Price" placeholder="0" min="0" required />
+            </div>
+
+            <div class="form-group half">
+                <label class="required">Категория:</label>
+                <select name="idCategory" required>
+                    @foreach (var category in categories)
+                    {
+                        if (category.Id == Model.Categorys?.Id)
+                        {
+                            <option selected value="@category.Id">@category.Name</option>
+                        }
+                        else
+                        {
+                            <option value="@category.Id">@category.Name</option>
+                        }
+                    }
+                </select>
+            </div>
+        </div>
+
+        <div class="button-group">
+            <button type="submit" class="btn-save">Сохранить</button>
+            <a href="/Items/List" class="btn-cancel">Отмена</a>
+        </div>
+    </form>
+</div>

@@ -5,33 +5,67 @@
     Layout = "_Layout";
 }
 
-<form method="post" enctype="multipart/form-data">
-    <div>
-        Наименование:
-        <br /> <input name="name" placeholder="Наименование:" />
-    </div>
-    <div>
-        Описание:
-        <br /> <input name="description" placeholder="Описание:" />
-    </div>
-    <div>
-        <label for="file">Изображение</label>
-        <br /> <input name="files" type="file" />
-    </div>
-    <div>
-        Стоимость:
-        <br /> <input name="price" />
-    </div>
-    <div>
-        Категория:
-        <br /> <select name="idCategory">
-            @{
-                foreach (var Category in Model)
-                {
-                    <option value="@Category.Id">@Category.Name</option>
-                }
+<div class="add-form">
+    <h2>Добавление товара</h2>
+
+    <form method="post" enctype="multipart/form-data" id="addForm">
+        <div class="form-group">
+            <label class="required">Наименование:</label>
+            <input type="text" name="name" placeholder="Введите наименование" required />
+        </div>
+
+        <div class="form-group">
+            <label class="required">Описание:</label>
+            <textarea name="description" placeholder="Введите описание" rows="4" required></textarea>
+        </div>
+
+        <div class="form-group">
+            <label>Изображение:</label>
+            <input type="file" name="files" accept="image/*" />
+        </div>
+
+        <div class="form-row">
+            <div class="form-group half">
+                <label class="required">Стоимость (₽):</label>
+                <input type="number" name="price" placeholder="0" min="0" required />
+            </div>
+
+            <div class="form-group half">
+                <label class="required">Категория:</label>
+                <select name="idCategory" required>
+                    @foreach (var category in Model)
+                    {
+                        <option value="@category.Id">@category.Name</option>
+                    }
+                </select>
+            </div>
+        </div>
+
+        <div class="button-group">
+            <button type="submit" class="btn-submit" id="submitBtn">Добавить</button>
+            <a href="/Items/List" class="btn-cancel">Отмена</a>
+        </div>
+    </form>
+</div>
+
+<script>
+    document.getElementById('addForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        var formData = new FormData(this);
+
+        fetch('/Items/Add', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => {
+            if (response.redirected) {
+                alert('Данные успешно добавлены!');
+                window.location.href = '/Items/List';
             }
-        </select>
-    </div>
-    <input type="submit" />
-</form>
+        })
+        .catch(error => {
+            alert('Произошла ошибка при добавлении');
+        });
+    });
+</script>

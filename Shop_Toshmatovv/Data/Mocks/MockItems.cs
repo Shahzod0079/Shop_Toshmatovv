@@ -68,9 +68,37 @@ namespace Shop_Toshmatovv.Data.Mocks
             }
         }
 
+        public int Add(Items item)
+        {
+            throw new NotImplementedException();
+        }
+
         public IEnumerable<Items> FindItems(string searchString)
         {
             throw new NotImplementedException();
+        }
+        public Items GetItem(int id)
+        {
+            return AllItems.FirstOrDefault(i => i.Id == id);
+        }
+
+        public void Update(Items item)
+        {
+            // Для Mock просто ничего не делаем или можно обновить в списке
+            var existingItem = AllItems.FirstOrDefault(i => i.Id == item.Id);
+            if (existingItem != null)
+            {
+                existingItem.Name = item.Name;
+                existingItem.Description = item.Description;
+                existingItem.Price = item.Price;
+                existingItem.Img = item.Img;
+                existingItem.Categorys = item.Categorys;
+            }
+        }
+
+        public void Delete(int id)
+        {
+            // Для Mock тоже заглушка
         }
     }
 }

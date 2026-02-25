@@ -8,10 +8,13 @@
     <div class="header">
         <img src="/images/location_14790627.png" />
 
-        <form method="get" action="@Url.Action("List", "Items")" style="display: inline;">
+        <form method="get" action="@Url.Action("List", "Items")" style="display: flex; align-items: center; margin-left: 20px;">
             <input class="search" name="searchString" placeholder="Поиск по сайту"
-                   value="@(ViewBag.CurrentSearch ?? "")" />
-            <button type="submit" style="display: none;">Найти</button>
+                   value="@(ViewBag.CurrentSearch ?? "")"
+                   style="width: 300px; padding: 8px; border: 1px solid #ddd; border-radius: 3px 0 0 3px; outline: none;" />
+            <button type="submit" style="padding: 8px 20px; background: #28a745; color: white; border: none; border-radius: 0 3px 3px 0; cursor: pointer; font-weight: bold; margin-left: 10px">
+                Найти
+            </button>
         </form>
 
         <div class="nav-links">

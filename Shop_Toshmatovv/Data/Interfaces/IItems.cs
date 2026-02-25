@@ -6,6 +6,9 @@ namespace Shop_Toshmatovv.Data.Interfaces
     {
         IEnumerable<Items> AllItems { get; }
         IEnumerable<Items> FindItems(string searchString);
-        int Add(Items item); // Добавить этот метод
+        int Add(Items item);
+        void Update(Items item);    
+        void Delete(int id);          
+        Items GetItem(int id);
     }
 }

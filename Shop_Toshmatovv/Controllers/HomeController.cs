@@ -1,12 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace Shop_Toshmatovv.Controllers
+public class HomeController : Controller
 {
-    public class HomeController : Controller
+    public RedirectResult Index()
     {
-        public RedirectResult Index()
-        {
-            return Redirect("/Items/List");
-        }
+        return Redirect("/Items/List");
     }
 }

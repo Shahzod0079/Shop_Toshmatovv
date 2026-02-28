@@ -31,32 +31,120 @@
     {
         foreach (var item in Model)
         {
-            <div style="border: 1px solid #ccc; margin: 10px 0; padding: 10px; display: flex; gap: 20px;">
+            <div class="item" style="border: 1px solid #ccc; margin: 10px 0; padding: 10px; display: flex; gap: 20px;">
                 @if (!string.IsNullOrEmpty(item.Img))
                 {
                     string imagePath = item.Img.StartsWith("/") ? item.Img : "/Images/" + item.Img;
                     <img src="@imagePath" alt="@item.Name" style="max-width: 200px; max-height: 200px;" />
                 }
+                
                 <div style="flex: 1;">
                     <h3>@item.Name</h3>
                     <p><strong>Цена:</strong> @item.Price.ToString("C")</p>
-                    <p><strong>Категория:</strong> @(item.Categorys?.Name ?? "Неизвестно")</p>
+                    <p><strong>Категория:</strong> @item.Categorys?.Name</p>
                     <p><strong>Описание:</strong> @item.Description</p>
 
-                    <!-- ДОБАВЛЕННЫЕ КНОПКИ -->
-                    <div style="margin-top: 15px;">
-                        <a href="/Items/Update/@item.Id?categoryId=@categoryId"
-                           style="background: #ffc107; color: black; padding: 8px 20px; text-decoration: none; border-radius: 3px; margin-right: 10px; display: inline-block;">
-                            Изменить
-                        </a>
-                        <a href="/Items/Delete/@item.Id?categoryId=@categoryId"
-                           onclick="return confirm('Удалить товар @item.Name?')"
-                           style="background: #dc3545; color: white; padding: 8px 20px; text-decoration: none; border-radius: 3px; display: inline-block;">
-                            Удалить
-                        </a>
+                    <div style="display: flex; align-items: center; gap: 10px; margin-top: 15px; flex-wrap: wrap;">
+
+                        <div class="basket" style="display: flex; align-items: center;">
+                            <button class="btn-basket" data-id="@item.Id" style="background: #007bff; color: white; border: none; padding: 8px 20px; border-radius: 3px; cursor: pointer; white-space: nowrap;">
+                                В корзину
+                            </button>
+                            <div class="count" style="display: none; align-items: center; gap: 2px;">
+                                <button class="btn-min" data-id="@item.Id" style="background: #6c757d; color: white; border: none; width: 30px; height: 30px; border-radius: 3px; cursor: pointer;">-</button>
+                                <span class="text" style="min-width: 20px; text-align: center;">1</span>
+                                <button class="btn-max" data-id="@item.Id" style="background: #6c757d; color: white; border: none; width: 30px; height: 30px; border-radius: 3px; cursor: pointer;">+</button>
+                            </div>
+                        </div>
+
+                        <a href="/Items/Update/@item.Id?categoryId=@categoryId" style="background: #ffc107; padding: 8px 20px; text-decoration: none; color: black; border-radius: 3px;">Изменить</a>
+                        <a href="/Items/Delete/@item.Id?categoryId=@categoryId" onclick="return confirm('Удалить?')" style="background: #dc3545; padding: 8px 20px; text-decoration: none; color: white; border-radius: 3px;">Удалить</a>
                     </div>
                 </div>
             </div>
         }
     }
 </div>
+
+<!-- Подключение Jquery-->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+        // при нажатии на кнопку "В корзину"
+        $(".btn-basket").click(function() {
+            var button = $(this);
+            var basketDiv = button.closest('.basket');
+            var countDiv = basketDiv.find('.count');
+            var itemId = button.data('id');
+
+            button.hide();
+            countDiv.css('display', 'flex');
+
+            $.ajax({
+                url: '@Url.Action("Basket", "Items")',
+                type: 'POST',
+                data: { idItem: itemId },
+                success: function(data) {
+                    console.log("Товар добавлен в корзину");
+                    $.get('@Url.Action("GetBasketCount", "Items")', function(count) {
+                        $('#basketCount').text(count);
+                    });
+                }
+            });
+        });
+
+        // кнопка увеличения
+        $(".btn-max").click(function() {
+            var button = $(this);
+            var countDiv = button.closest('.count');
+            var textSpan = countDiv.find('.text');
+            var itemId = button.data('id');
+            var count = parseInt(textSpan.text());
+
+            count++;
+            textSpan.text(count);
+
+            $.ajax({
+                url: '@Url.Action("BasketCount", "Items")',
+                type: 'POST',
+                data: { idItem: itemId, count: count },
+                success: function() {
+                    $.get('@Url.Action("GetBasketCount", "Items")', function(count) {
+                        $('#basketCount').text(count);
+                    });
+                }
+            });
+        });
+
+        // кнопка уменьшения
+        $(".btn-min").click(function() {
+            var button = $(this);
+            var countDiv = button.closest('.count');
+            var textSpan = countDiv.find('.text');
+            var basketDiv = button.closest('.basket');
+            var itemId = button.data('id');
+            var count = parseInt(textSpan.text());
+
+            count--;
+            
+            if (count == 0) {
+                basketDiv.find('.btn-basket').show();
+                countDiv.hide();
+            } else {
+                textSpan.text(count);
+            }
+
+            $.ajax({
+                url: '@Url.Action("BasketCount", "Items")',
+                type: 'POST',
+                data: { idItem: itemId, count: count },
+                success: function() {
+                    $.get('@Url.Action("GetBasketCount", "Items")', function(count) {
+                        $('#basketCount').text(count);
+                    });
+                }
+            });
+        });
+    });
+</script>

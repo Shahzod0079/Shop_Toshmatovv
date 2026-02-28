@@ -1,0 +1,50 @@
+﻿@using Shop_Toshmatovv.Data.Models
+@model IEnumerable<ItemsBasket>
+
+@{
+    ViewBag.Title = "Корзина";
+    Layout = "_Layout";
+}
+
+<h2>Корзина</h2>
+
+@if (!Model.Any())
+{
+    <p>Корзина пуста</p>
+}
+else
+{
+    decimal totalSum = 0;
+
+    @foreach (var item in Model)
+    {
+        totalSum += item.Item.Price * item.Count;
+
+        <div style="border: 1px solid #ccc; margin: 10px 0; padding: 10px; display: flex; gap: 20px; align-items: center;">
+            @if (!string.IsNullOrEmpty(item.Item.Img))
+            {
+                string imagePath = item.Item.Img.StartsWith("/") ? item.Item.Img : "/Images/" + item.Item.Img;
+                <img src="@imagePath" alt="@item.Item.Name" style="max-width: 200px; max-height: 200px;" />
+            }
+
+            <div style="flex: 1;">
+                <h3>@item.Item.Name</h3>
+                <p><strong>Цена:</strong> @item.Item.Price.ToString("C")</p>
+                <p><strong>Количество:</strong> @item.Count</p>
+                <p><strong>Сумма:</strong> @((item.Item.Price * item.Count).ToString("C"))</p>
+            </div>
+
+            <div>
+                <a href="/Items/RemoveFromBasket/@item.Item.Id"
+                   style="background: #dc3545; color: white; padding: 8px 20px; text-decoration: none; border-radius: 3px;"
+                   onclick="return confirm('Убрать из корзины?')">
+                    Удалить
+                </a>
+            </div>
+        </div>
+    }
+
+    <div style="text-align: right; margin-top: 20px; padding: 10px; background: #f8f9fa; border-radius: 3px;">
+        <h3>Общая сумма: @totalSum.ToString("C")</h3>
+    </div>
+}

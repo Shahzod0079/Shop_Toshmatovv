@@ -14,7 +14,7 @@
             <input class="search" name="searchString" placeholder="Поиск по сайту"
                    value="@(ViewBag.CurrentSearch ?? "")"
                    style="width: 300px; padding: 8px; border: 1px solid #ddd; border-radius: 3px 0 0 3px; outline: none;" />
-            <button type="submit" style="padding: 8px 20px; background: #28a745; color: white; border: none; border-radius: 0 3px 3px 0; cursor: pointer; font-weight: bold; margin-left: 10px">
+            <button type="submit" style="padding: 8px 20px; background: #28a745; color: white; border: none; border-radius: 0 3px 3px 0; cursor: pointer; font-weight: bold;">
                 Найти
             </button>
         </form>
@@ -24,12 +24,11 @@
             <a href="@Url.Action("Index", "Categories")" class="nav-link">Категории</a>
         </div>
 
-        <div style="position: relative; display: inline-block;">
+        <div style="position: relative; display: inline-block; cursor: pointer;" onclick="window.location='/Items/BasketPage'">
             <img class="basket" src="/images/shopping_16454496.png" />
             <span id="basketCount" style="position: absolute; top: -8px; right: -8px; background: red; color: white; border-radius: 50%; padding: 2px 6px; font-size: 12px; min-width: 16px; text-align: center;">0</span>
         </div>
-    </div>
-
+    </div> <!-- ЗАКРЫВАЮЩИЙ ТЕГ HEADER -->
     @RenderBody()
 </body>
 </html>

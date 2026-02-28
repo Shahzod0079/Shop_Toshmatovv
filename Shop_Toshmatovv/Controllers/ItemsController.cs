@@ -182,28 +182,48 @@ namespace Shop_Toshmatovv.Controllers
         {
             if (idItem != -1)
             {
-
-                Startup.BasketItem.Add(new ItemsBasket(1, _iAllItems.AllItems.Where(x => x.Id == idItem).First()));
+                var item = _iAllItems.AllItems.FirstOrDefault(x => x.Id == idItem);
+                if (item != null)
+                {
+                    Startup.BasketItem.Add(new ItemsBasket(1, item));
+                }
             }
-
             return Json(Startup.BasketItem);
         }
         public ActionResult BasketCount(int idItem = -1, int count = -1)
         {
             if (idItem != -1)
             {
-                if (count == 0)
-                    Startup.BasketItem.Remove(Startup.BasketItem.Find(x => x.Id == idItem));
-
-                Startup.BasketItem.Find(x => x.Id == idItem).Count = count;
+                var basketItem = Startup.BasketItem.FirstOrDefault(x => x.Item.Id == idItem);
+                if (basketItem != null)
+                {
+                    if (count == 0)
+                        Startup.BasketItem.Remove(basketItem);
+                    else
+                        basketItem.Count = count;
+                }
             }
-
             return Json(Startup.BasketItem);
         }
         public ActionResult GetBasketCount()
         {
             int count = Startup.BasketItem?.Sum(x => x.Count) ?? 0;
             return Json(count);
+        }
+        public ActionResult BasketPage()
+        {
+            var basketItems = Startup.BasketItem ?? new List<ItemsBasket>();
+            return View(basketItems);
+        }
+
+        public ActionResult RemoveFromBasket(int id)
+        {
+            var item = Startup.BasketItem?.FirstOrDefault(x => x.Item.Id == id);
+            if (item != null)
+            {
+                Startup.BasketItem.Remove(item);
+            }
+            return RedirectToAction("BasketPage");
         }
     }
 }

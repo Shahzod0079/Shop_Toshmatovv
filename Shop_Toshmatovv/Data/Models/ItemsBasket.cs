@@ -1,11 +1,13 @@
 ﻿using Shop_Toshmatovv.Data.Models;
 
-public class ItemsBasket : Items
+public class ItemsBasket
 {
     public int Count { get; set; }
+    public Items Item { get; set; }
 
-    public ItemsBasket(int Count, Items item) : base(item)
+    public ItemsBasket(int count, Items item)
     {
-        this.Count = Count;
+        Count = count;
+        Item = item;
     }
 }

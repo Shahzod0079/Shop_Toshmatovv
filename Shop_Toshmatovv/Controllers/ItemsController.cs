@@ -200,5 +200,10 @@ namespace Shop_Toshmatovv.Controllers
 
             return Json(Startup.BasketItem);
         }
+        public ActionResult GetBasketCount()
+        {
+            int count = Startup.BasketItem?.Sum(x => x.Count) ?? 0;
+            return Json(count);
+        }
     }
 }

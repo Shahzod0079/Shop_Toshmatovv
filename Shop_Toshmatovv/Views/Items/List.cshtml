@@ -109,33 +109,41 @@ else
 
 <script>
     $(document).ready(function() {
+        // Получаем текущее количество товаров в корзине
+        $.get('@Url.Action("GetBasketCount", "Items")', function(count) {
+            $('#basketCount').text(count);
+        });
+
         // при нажатии на кнопку "В корзину"
         $(".btn-basket").click(function() {
             var button = $(this);
             var basketDiv = button.closest('.basket');
             var countDiv = basketDiv.find('.count');
             var itemId = button.data('id');
-            
+
             // скрываем кнопку "В корзину"
             button.hide();
-            
+
             // показываем счетчик
             countDiv.css('display', 'flex');
-            
-            // вызываем AJAX для добавления в корзину
+
             $.ajax({
                 url: '@Url.Action("Basket", "Items")',
                 type: 'POST',
                 data: { idItem: itemId },
                 success: function(data) {
                     console.log("Товар добавлен в корзину:", data);
+                    // Обновляем счетчик
+                    $.get('@Url.Action("GetBasketCount", "Items")', function(count) {
+                        $('#basketCount').text(count);
+                    });
                 },
                 error: function(xhr, status, error) {
                     console.log("Ошибка добавления:", error);
                 }
             });
         });
-        
+
         // кнопка увеличения количества
         $(".btn-max").click(function() {
             var button = $(this);
@@ -143,28 +151,30 @@ else
             var textSpan = countDiv.find('.text');
             var itemId = button.data('id');
             var count = parseInt(textSpan.text());
-            
-            // увеличиваем количество
+
             count++;
             textSpan.text(count);
-            
-            // вызываем AJAX для обновления количества
+
             $.ajax({
                 url: '@Url.Action("BasketCount", "Items")',
                 type: 'POST',
-                data: { 
+                data: {
                     idItem: itemId,
-                    count: count 
+                    count: count
                 },
                 success: function(data) {
                     console.log("Количество обновлено:", data);
+                    // Обновляем счетчик
+                    $.get('@Url.Action("GetBasketCount", "Items")', function(count) {
+                        $('#basketCount').text(count);
+                    });
                 },
                 error: function(xhr, status, error) {
                     console.log("Ошибка обновления:", error);
                 }
             });
         });
-        
+
         // кнопка уменьшения количества
         $(".btn-min").click(function() {
             var button = $(this);
@@ -173,29 +183,29 @@ else
             var basketDiv = button.closest('.basket');
             var itemId = button.data('id');
             var count = parseInt(textSpan.text());
-            
-            // уменьшаем количество
+
             count--;
-            
+
             if (count == 0) {
-                // если количество = 0, показываем кнопку "В корзину" и скрываем счетчик
                 basketDiv.find('.btn-basket').show();
                 countDiv.hide();
             } else {
-                // иначе обновляем текст
                 textSpan.text(count);
             }
-            
-            // вызываем AJAX для обновления количества
+
             $.ajax({
                 url: '@Url.Action("BasketCount", "Items")',
                 type: 'POST',
-                data: { 
+                data: {
                     idItem: itemId,
-                    count: count 
+                    count: count
                 },
                 success: function(data) {
                     console.log("Количество обновлено:", data);
+                    // Обновляем счетчик
+                    $.get('@Url.Action("GetBasketCount", "Items")', function(count) {
+                        $('#basketCount').text(count);
+                    });
                 },
                 error: function(xhr, status, error) {
                     console.log("Ошибка обновления:", error);

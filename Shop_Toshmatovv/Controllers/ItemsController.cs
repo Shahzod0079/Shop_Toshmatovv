@@ -19,6 +19,7 @@ namespace Shop_Toshmatovv.Controllers
             _hostingEnvironment = environment;
         }
 
+
         [HttpGet]
         public ViewResult List(int id = 0, string sortOrder = "asc", string searchString = "")
         {
@@ -55,7 +56,7 @@ namespace Shop_Toshmatovv.Controllers
             return View(_vMItems);
         }
         [HttpGet]
-        public IActionResult Add(int? categoryId = null)  
+        public IActionResult Add(int? categoryId = null)
         {
             IEnumerable<Categorys> categories = _iAllCategorys.AllCategories;
 
@@ -174,6 +175,18 @@ namespace Shop_Toshmatovv.Controllers
             }
 
             return Redirect("/Items/List");
+        }
+
+
+        public ActionResult Basket(int idItem = -1)
+        {
+            if (idItem != -1)
+            {
+                // ИСПРАВЛЕНО: используем _iAllItems (приватное поле контроллера)
+                Startup.BasketItem.Add(new ItemsBasket(1, _iAllItems.AllItems.Where(x => x.Id == idItem).First()));
+            }
+
+            return Json(Startup.BasketItem);
         }
     }
 }

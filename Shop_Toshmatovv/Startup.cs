@@ -10,10 +10,12 @@ namespace Shop_Toshmatovv
 {
     public class Startup
     {
+        public static List<ItemsBasket> BasketItem = new List<ItemsBasket>();
         public IConfiguration Configuration { get; }
 
         public Startup(IConfiguration configuration)
         {
+
             Configuration = configuration;
         }
 
